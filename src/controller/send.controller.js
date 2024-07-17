@@ -1,6 +1,6 @@
-const axios = require('axios');
+import axios from 'axios';
 
-async function sendMessage(req, res) {
+export async function sendMessage(req, res) {
     try {
         const url = 'https://graph.facebook.com/v20.0/331209570084524/messages';
         const accessToken = 'TOKENMETA';
@@ -27,7 +27,3 @@ async function sendMessage(req, res) {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 }
-
-module.exports = {
-    sendMessage
-};
