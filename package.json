@@ -7,14 +7,20 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "azulcolor <lealpastelin@gmail.com>",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "axios": "^1.7.2",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "prettier": "^3.3.3"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.5.8"
-  }
+    "@eslint/js": "^9.7.0",
+    "@flydotio/dockerfile": "^0.5.8",
+    "eslint": "9.x",
+    "globals": "^15.8.0"
+  },
+  "repository": "git@github.com:javiErUT2/apiback.git"
 }
