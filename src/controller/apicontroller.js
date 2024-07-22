@@ -1,6 +1,4 @@
-const enviarmensaje = require("../service/apiservice");
-
-const verificar = (req, res) => {
+export const verificar = (req, res) => {
     try {
         var tokenandercode = "TOKENMETA";
         var token = req.query["hub.verify_token"];
@@ -17,7 +15,7 @@ const verificar = (req, res) => {
     }
 };
 
-const recibir = (req, res) => {
+export const recibir = (req, res) => {
     try {
         var entry = req.body["entry"] ? req.body["entry"][0] : undefined;
         var changes = entry ? entry["changes"][0] : undefined;
@@ -53,9 +51,4 @@ const recibir = (req, res) => {
         console.error('Error al procesar el mensaje:', e);
         res.send("EVENT_RECEIVED");
     }
-};
-
-module.exports = {
-    verificar,
-    recibir
 };

@@ -1,15 +1,16 @@
 // rutas.js
 
-const express = require('express');
-const router = express.Router();
-const apicontroller = require('../controller/apicontroller');
-const facebookController = require('../controller/MandarController'); // Asegúrate de que la ruta al controlador sea correcta
+import { Router } from 'express';
+const router = Router();
+
+import { verificar, recibir } from '../controller/apicontroller.js';
+import { sendMessage } from '../controller/send.controller.js';
 
 // Rutas existentes
-router.get('/', apicontroller.verificar);
-router.post('/', apicontroller.recibir);
+router.get('/', verificar);
+router.post('/', recibir);
 
 // Ruta para enviar mensaje a través de la API de Facebook Graph
-router.post('/send-message', facebookController.sendMessage);
+router.post('/send-message', sendMessage);
 
-module.exports = router;
+export default router;

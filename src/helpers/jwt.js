@@ -6,5 +6,13 @@ export const generateToken = (user) => {
             id: user.id,
             email: user.email
         };
+        jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: '28d'
+        }, (err, token) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(token);
+        });
     })
 }
