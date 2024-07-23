@@ -1,16 +1,32 @@
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs' 
 import { pool } from '../database/config.js'
 import { generateToken } from '../helpers/jwt.js';
 
 export const createUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { body } = req;
+        const { fullname, role_id, password} = body;
 
-        if (!name || !email || !password) {
+        if (!fullname || !role_id || !password) {
             return res.status(400).json({ error: 'Faltan campos por llenar' });
         }   
 
-        res.status(201).json({ message: 'Usuario creado' });
+        const salt = bcrypt.genSaltSync();
+        body.password = bcrypt.hashSync(password, salt);
+
+
+        const [rows] = await pool.query('INSERT INTO users SET ?', [body]);
+
+        const token = await generateToken(rows.insertId, fullname, role_id);
+
+
+        res.status(201).json({
+            ok: true,
+            message: 'Usuario creado',
+            id: rows.insertId,
+            token
+         });
+
         
 
     } catch (error) {
