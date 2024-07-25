@@ -5,9 +5,9 @@ import { generateToken } from '../helpers/jwt.js';
 export const createUser = async (req, res) => {
     try {
         const { body } = req;
-        const { fullname, role_id, password} = body;
+        const { fullname, role_id, password, username} = body;
 
-        if (!fullname || !role_id || !password) {
+        if (!fullname || !role_id || !password || !username) {
             return res.status(400).json({ error: 'Faltan campos por llenar' });
         }   
 
@@ -35,41 +35,27 @@ export const createUser = async (req, res) => {
     }
 }
 
-export const loginUser = async (req, res) => {
-    const { username, password } = req.body;
-
-    try {
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Faltan campos por llenar' });
-        }
-
-        res.status(200).json({ message: 'Usuario logueado' });
-    } catch(error) {
-        console.error('Error al loguear el usuario:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-    
-}
-
 export const userLogin = async (req, res) => {
-    const { userName, userPassword } = req.body
+    const { username, password } = req.body
+    console.log(username)
   
     try {
-      const [rows] = await pool.query('SELECT * FROM users WHERE userName = ?', [
-        userName,
+      const [rows] = await pool.query('SELECT * FROM users WHERE username = ?', [
+        username,
       ])
-  
+
       const user = rows[0]
   
-      if (user.userName === undefined) {
+      console.log(user)
+     if(!user) {
         return res.status(400).json({
           ok: false,
-          message: 'User or password incorrect',
+          message: 'Usuario o contraseña incorrectos',
         })
-      }
+}
   
       //Validate password
-      const validPassword = bcrypt.compareSync(userPassword, user.userPassword)
+      const validPassword = bcrypt.compareSync(password, user.password)
   
       if (!validPassword) {
         return res.status(400).json({
@@ -78,14 +64,16 @@ export const userLogin = async (req, res) => {
         })
       }
   
+      const { id, fullname, role_id } = user
+
       //Generate JWT
-      const token = await generateToken(user.idUser, user.userName, user.idRol)
+      const token = await generateToken(id, fullname, role_id);
   
       res.status(200).json({
         ok: true,
-        uid: user.id,
-        name: user.fullName,
-        rol: user.idRol,
+        uid: id,
+        name: fullname,
+        rol: role_id,
         token,
       })
     } catch (error) {
@@ -116,7 +104,7 @@ export const userLogin = async (req, res) => {
         body.userPassword = bcrypt.hashSync(body.userPassword, salt)
       }
   
-      await pool.query('UPDATE users SET ? WHERE idUser = ?', [body, id])
+      await pool.query('UPDATE users SET ? WHERE id = ?', [body, id])
   
       res.status(201).json({
         ok: true,
@@ -142,7 +130,7 @@ export const userLogin = async (req, res) => {
         })
       }
   
-      await pool.query('DELETE FROM users WHERE idUser = ?', [id])
+      await pool.query('DELETE FROM users WHERE user = ?', [id])
   
       res.status(201).json({
         ok: true,
