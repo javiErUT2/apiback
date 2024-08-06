@@ -9,7 +9,7 @@ export const generateToken = (insertId, fullname, role_id) => {
         const payload = {
             id: insertId,
            fullname,
-           role_id 
+           role_id,  
         };
         jwt.sign(payload, seed, {
             expiresIn: '28d'

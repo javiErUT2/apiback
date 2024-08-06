@@ -1,6 +1,6 @@
 import express from 'express';
 import apiRoute from './routes/ruta.js';
-import send from './routes/send.routes.js';
+import chat from './routes/chat.routes.js';
 import auth from './routes/auth.routes.js';
 import { getConnection } from './database/config.js';
 import cors from 'cors';
@@ -14,7 +14,7 @@ getConnection();
 app.use(cors());
 app.use(express.json());
 app.use("/api", apiRoute);
-app.use('/api/send', send);
+app.use('/api/chat', chat);
 app.use('/api/auth', auth)
 
 app.listen(PORT, () => {
